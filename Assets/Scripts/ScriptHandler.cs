@@ -16,6 +16,17 @@ public class ScriptHandler : MonoBehaviour {
     void Start()
     {
         BuildMatrix();
+        
+    }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            foreach (GameObject cube in currRubix)
+            {
+                Debug.Log(cube.transform.position);
+            }
+        }
     }
 
     void BuildMatrix()
@@ -143,6 +154,10 @@ public class ScriptHandler : MonoBehaviour {
                 currRubix[2, 1, 2] = cube;
             if (cube.transform.position == new Vector3(cubeSize, -cubeSize, cubeSize))
                 currRubix[2, 2, 2] = cube;
+
+            //MiddleCube
+            if (cube.transform.position == new Vector3(0, 0, 0))
+                currRubix[1, 1, 1] = cube;
         }
              
     }
