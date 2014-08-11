@@ -22,13 +22,9 @@ public class ScriptHandler : MonoBehaviour {
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            RotateUp();
-        }
+        
     }
-
-    void RotateUp()
+    void RotateUp(bool right)
     {
         GameObject[] cubes = GameObject.FindGameObjectsWithTag("Cube");
         Pivot = new GameObject("Pivot");
@@ -39,7 +35,15 @@ public class ScriptHandler : MonoBehaviour {
             if (cube.transform.position.y > 0)
                 cube.transform.parent = Pivot.transform;
         }
-        Pivot.transform.RotateAround(Pivot.transform.position, Vector3.up, 90);
+        if(right)
+            Pivot.transform.RotateAround(Pivot.transform.position, Vector3.up, -90);
+        else
+            Pivot.transform.RotateAround(Pivot.transform.position, Vector3.up, 90);
+    }
+
+    void Rotation(Vector3 axis, float angle)
+    {
+
     }
     void BuildMatrix()
     {
