@@ -6,6 +6,8 @@ public class ScriptHandler : MonoBehaviour {
     GameObject[, ,] startRubix;
     GameObject[, ,] currRubix;
 
+    GameObject Pivot;
+
     public float cubeSize = 0.3048f;
     void Awake()
     {
@@ -22,13 +24,23 @@ public class ScriptHandler : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            foreach (GameObject cube in currRubix)
-            {
-                Debug.Log(cube.transform.position);
-            }
+            RotateUp();
         }
     }
 
+    void RotateUp()
+    {
+        GameObject[] cubes = GameObject.FindGameObjectsWithTag("Cube");
+        Pivot = new GameObject("Pivot");
+        Pivot.transform.position = new Vector3(0,cubeSize,0);
+        Pivot.transform.parent = GameObject.FindGameObjectWithTag("Rubix").transform;
+        foreach (GameObject cube in cubes)
+        {
+            if (cube.transform.position.y > 0)
+                cube.transform.parent = Pivot.transform;
+        }
+        Pivot.transform.RotateAround(Pivot.transform.position, Vector3.up, 90);
+    }
     void BuildMatrix()
     {
         GameObject[] cubes = GameObject.FindGameObjectsWithTag("Cube");
