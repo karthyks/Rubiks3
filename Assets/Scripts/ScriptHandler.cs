@@ -1,44 +1,134 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class ScriptHandler : MonoBehaviour {
 
     GameObject[, ,] startRubix;
     GameObject[, ,] currRubix;
-
     GameObject Pivot;
-
     public float cubeSize = 0.3048f;
+
+    GameObject[] face;
     void Awake()
     {
         startRubix = new GameObject[3, 3, 3];
         currRubix = new GameObject[3, 3, 3];
+        face = new GameObject[9];
     }
 
     void Start()
     {
         BuildMatrix();
-        
+        GameObject.FindGameObjectWithTag("Rubix").transform.DetachChildren();
     }
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+            ResetParent();
     }
-    void RotateUp(bool right)
+
+    void RotateUp(bool[] rotationParam)
+    {
+        bool right = rotationParam[0];
+        bool up = rotationParam[1];
+        GameObject[] cubes = GameObject.FindGameObjectsWithTag("Cube");       
+        Pivot = new GameObject("Pivot");
+        Pivot.transform.position = new Vector3(0,0,0);
+        foreach (GameObject cube in cubes)
+        {
+            if (up)
+            {
+                if (cube.transform.position.y > 0)
+                {
+                    cube.transform.parent = Pivot.transform;
+                }
+            }
+            else
+            {
+                if (cube.transform.position.y < 0)
+                {
+                    cube.transform.parent = Pivot.transform;
+                }
+            }
+        }
+        if (right)
+        {
+            Pivot.transform.RotateAround(Pivot.transform.position, Vector3.up, -90);
+        }
+        else
+        {
+            Pivot.transform.RotateAround(Pivot.transform.position, Vector3.up, 90);
+        }
+
+        int i = 0;
+        foreach (Transform child in Pivot.transform)
+        {
+            face[i] = child.gameObject;
+            i++;
+
+        }
+        Pivot.transform.DetachChildren();
+        Destroy(Pivot);
+        ResetParent();
+    }
+
+    void ResetParent()
     {
         GameObject[] cubes = GameObject.FindGameObjectsWithTag("Cube");
+        foreach (GameObject faceCube in face)
+        {
+            foreach (GameObject cube in cubes)
+            {
+                if (faceCube.name == cube.name)
+                {
+                    double x = Mathf.Floor(faceCube.transform.position.x * 100) / 100;
+                    double y = Mathf.Floor(faceCube.transform.position.y * 100) / 100;
+                    double z = Mathf.Floor(faceCube.transform.position.z * 100) / 100;
+                    cube.transform.position = new Vector3((float)(Math.Round(x, 1)), (float)(Math.Round(y, 1)), (float)(Math.Round(z, 1)));
+                }
+            }
+        }
+    }
+
+    void RotateRight(bool[] rotationParam)
+    {
+        bool up = rotationParam[0];
+        bool right = rotationParam[1];
+        GameObject[] cubes = GameObject.FindGameObjectsWithTag("Cube");
         Pivot = new GameObject("Pivot");
-        Pivot.transform.position = new Vector3(0,cubeSize,0);
+        Pivot.transform.position = new Vector3(0, 0, 0);
         Pivot.transform.parent = GameObject.FindGameObjectWithTag("Rubix").transform;
         foreach (GameObject cube in cubes)
         {
-            if (cube.transform.position.y > 0)
-                cube.transform.parent = Pivot.transform;
+            if (right)
+            {
+                if (cube.transform.position.x > 0.1)
+                    cube.transform.parent = Pivot.transform;
+            }
+            else
+            {
+                if (cube.transform.position.x < -0.1)
+                    cube.transform.parent = Pivot.transform;
+            }
         }
-        if(right)
-            Pivot.transform.RotateAround(Pivot.transform.position, Vector3.up, -90);
+        if (up)
+            Pivot.transform.RotateAround(Pivot.transform.position, Vector3.left, -90);
         else
-            Pivot.transform.RotateAround(Pivot.transform.position, Vector3.up, 90);
+            Pivot.transform.RotateAround(Pivot.transform.position, Vector3.left, 90);
+
+        int i = 0;
+        foreach (Transform child in Pivot.transform)
+        {
+            //Debug.Log(child.name);
+            face[i] = child.gameObject;
+            //Debug.Log(face[i].transform.position);
+            i++;
+
+        }
+        Pivot.transform.DetachChildren();
+        Destroy(Pivot);
+        ResetParent();
     }
 
     void Rotation(Vector3 axis, float angle)
