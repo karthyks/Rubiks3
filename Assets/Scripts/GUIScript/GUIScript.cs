@@ -42,13 +42,13 @@ public class GUIScript : MonoBehaviour {
         if (GUI.Button(new Rect(200, Screen.height/2 -50, 30, 30), "i"))
         {
             rotationParams[0] = false;
-            rotationParams[1] = true;
+            rotationParams[1] = false;
             Receptor.BroadcastMessage("RotateRight", rotationParams, SendMessageOptions.DontRequireReceiver);
         }
         if (GUI.Button(new Rect(200, Screen.height / 2 + 50, 30, 30), "!"))
         {
             rotationParams[0] = true;
-            rotationParams[1] = true;
+            rotationParams[1] = false;
             Receptor.BroadcastMessage("RotateRight", rotationParams, SendMessageOptions.DontRequireReceiver);
         }
         if (GUI.Button(new Rect(Screen.width - 200, Screen.height / 2 - 50, 30, 30), "i"))
