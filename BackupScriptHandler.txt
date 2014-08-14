@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System;
 
@@ -9,17 +9,12 @@ public class ScriptHandler : MonoBehaviour {
     GameObject Pivot;
     public float cubeSize = 0.3048f;
 
-    // For rows and columns
     GameObject[] face;
-
-    // For whole cube
-    GameObject[] wholeCube;
     void Awake()
     {
         startRubix = new GameObject[3, 3, 3];
         currRubix = new GameObject[3, 3, 3];
         face = new GameObject[9];
-        wholeCube = new GameObject[27];
     }
 
     void Start()
@@ -62,77 +57,18 @@ public class ScriptHandler : MonoBehaviour {
             for (int j = 0; j < 3; j++)
             {
                 Pivot.transform.RotateAround(Pivot.transform.position, Vector3.up, 30);
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(0.5f);
             }
         }
         else
         {
-            for (int j = 0; j < 3; j++)
-            {
-                Pivot.transform.RotateAround(Pivot.transform.position, Vector3.up, -30);
-                yield return new WaitForSeconds(0.1f);
-            }
+            Pivot.transform.RotateAround(Pivot.transform.position, Vector3.up, -90);
         }
 
         int i = 0;
         foreach (Transform child in Pivot.transform)
         {
             face[i] = child.gameObject;
-            i++;
-
-        }
-        Pivot.transform.DetachChildren();
-        Destroy(Pivot);
-        ResetParent();
-    }
-
-    
-
-    IEnumerator RotateRight(bool[] rotationParam)
-    {
-        bool up = rotationParam[0];
-        bool right = rotationParam[1];
-        GameObject[] cubes = GameObject.FindGameObjectsWithTag("Cube");
-        Pivot = new GameObject("Pivot");
-        Pivot.transform.position = new Vector3(0, 0, 0);
-        Pivot.transform.parent = GameObject.FindGameObjectWithTag("Rubix").transform;
-        foreach (GameObject cube in cubes)
-        {
-            if (right)
-            {
-                if (cube.transform.position.x > 0.1)
-                    cube.transform.parent = Pivot.transform;
-            }
-            else
-            {
-                if (cube.transform.position.x < -0.1)
-                    cube.transform.parent = Pivot.transform;
-            }
-        }
-        if (up)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                Pivot.transform.RotateAround(Pivot.transform.position, Vector3.left, 30);
-                yield return new WaitForSeconds(0.1f);
-            }
-        }
-        else
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                Pivot.transform.RotateAround(Pivot.transform.position, Vector3.left, -30);
-                yield return new WaitForSeconds(0.1f);
-            }
-
-        }
-
-        int i = 0;
-        foreach (Transform child in Pivot.transform)
-        {
-            //Debug.Log(child.name);
-            face[i] = child.gameObject;
-            //Debug.Log(face[i].transform.position);
             i++;
 
         }
@@ -159,100 +95,49 @@ public class ScriptHandler : MonoBehaviour {
         }
     }
 
-
-    IEnumerator RubixHorizontal(bool right)
+    void RotateRight(bool[] rotationParam)
     {
+        bool up = rotationParam[0];
+        bool right = rotationParam[1];
         GameObject[] cubes = GameObject.FindGameObjectsWithTag("Cube");
         Pivot = new GameObject("Pivot");
         Pivot.transform.position = new Vector3(0, 0, 0);
-
+        Pivot.transform.parent = GameObject.FindGameObjectWithTag("Rubix").transform;
         foreach (GameObject cube in cubes)
         {
-            cube.transform.parent = Pivot.transform;
-        }
-        if (right)
-        {
-            for (int j = 0; j < 3; j++)
+            if (right)
             {
-                Pivot.transform.RotateAround(Pivot.transform.position, Vector3.up, 30);
-                yield return new WaitForSeconds(0.1f);
+                if (cube.transform.position.x > 0.1)
+                    cube.transform.parent = Pivot.transform;
             }
-        }
-        else
-        {
-            for (int j = 0; j < 3; j++)
+            else
             {
-                Pivot.transform.RotateAround(Pivot.transform.position, Vector3.up, -30);
-                yield return new WaitForSeconds(0.1f);
+                if (cube.transform.position.x < -0.1)
+                    cube.transform.parent = Pivot.transform;
             }
-        }
-
-        int i = 0;
-
-        foreach (Transform child in Pivot.transform)
-        {
-            wholeCube[i] = child.gameObject;
-            i++;
-        }
-        Pivot.transform.DetachChildren();
-        Destroy(Pivot);
-        ResetWholeCube();
-    }
-    IEnumerator RubixVertical(bool up)
-    {
-        GameObject[] cubes = GameObject.FindGameObjectsWithTag("Cube");
-        Pivot = new GameObject("Pivot");
-        Pivot.transform.position = new Vector3(0, 0, 0);
-
-        foreach (GameObject cube in cubes)
-        {
-            cube.transform.parent = Pivot.transform;
         }
         if (up)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                Pivot.transform.RotateAround(Pivot.transform.position, Vector3.left, 30);
-                yield return new WaitForSeconds(0.1f);
-            }
-        }
+            Pivot.transform.RotateAround(Pivot.transform.position, Vector3.left, -90);
         else
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                Pivot.transform.RotateAround(Pivot.transform.position, Vector3.left, -30);
-                yield return new WaitForSeconds(0.1f);
-            }
-        }
+            Pivot.transform.RotateAround(Pivot.transform.position, Vector3.left, 90);
 
         int i = 0;
-
         foreach (Transform child in Pivot.transform)
         {
-            wholeCube[i] = child.gameObject;
+            //Debug.Log(child.name);
+            face[i] = child.gameObject;
+            //Debug.Log(face[i].transform.position);
             i++;
+
         }
         Pivot.transform.DetachChildren();
         Destroy(Pivot);
-        ResetWholeCube();
+        ResetParent();
     }
 
-    void ResetWholeCube()
+    void Rotation(Vector3 axis, float angle)
     {
-        GameObject[] cubes = GameObject.FindGameObjectsWithTag("Cube");
-        foreach (GameObject whole in wholeCube)
-        {
-            foreach (GameObject cube in cubes)
-            {
-                if (whole.name == cube.name)
-                {
-                    double x = Mathf.Floor(whole.transform.position.x * 100) / 100;
-                    double y = Mathf.Floor(whole.transform.position.y * 100) / 100;
-                    double z = Mathf.Floor(whole.transform.position.z * 100) / 100;
-                    cube.transform.position = new Vector3((float)(Math.Round(x, 1)), (float)(Math.Round(y, 1)), (float)(Math.Round(z, 1)));
-                }
-            }
-        }
+
     }
     void BuildMatrix()
     {

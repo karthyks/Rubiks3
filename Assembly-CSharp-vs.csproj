@@ -49,8 +49,7 @@
      <Compile Include="Assets\Scripts\GUIScript\GUIScript.cs" />
      <Compile Include="Assets\Scripts\PositionDebug.cs" />
      <Compile Include="Assets\Scripts\ScriptHandler.cs" />
-     <Compile Include="Assets\Scripts\TestingScripts\RotationScript.cs" />
-     <Compile Include="Assets\Scripts\TestingScripts\TestScript.cs" />
+     <Compile Include="Assets\Scripts\TestingScripts\ScriptTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

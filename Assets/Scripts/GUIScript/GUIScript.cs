@@ -11,6 +11,23 @@ public class GUIScript : MonoBehaviour {
     }
     void OnGUI()
     {
+        //Whole Cube Rotation
+        if(GUI.Button(new Rect(60,30,30,30), "U"))
+        {
+            Receptor.BroadcastMessage("RubixVertical", true, SendMessageOptions.DontRequireReceiver);
+        }
+        if (GUI.Button(new Rect(60, 80, 30, 30), "D"))
+        {
+            Receptor.BroadcastMessage("RubixVertical", false, SendMessageOptions.DontRequireReceiver);
+        }
+        if (GUI.Button(new Rect(20, 50, 30, 30), "L"))
+        {
+            Receptor.BroadcastMessage("RubixHorizontal", false, SendMessageOptions.DontRequireReceiver);
+        }
+        if (GUI.Button(new Rect(100, 50, 30, 30), "R"))
+        {
+            Receptor.BroadcastMessage("RubixHorizontal", true, SendMessageOptions.DontRequireReceiver);
+        }
         // Up and Down
 
         if(GUI.Button(new Rect(Screen.width/2 - 50, 30, 30,30), "<"))
